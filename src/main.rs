@@ -16,8 +16,9 @@ struct Cli {
 
 fn generate_random_files(amount: usize, path: &Path) -> anyhow::Result<()> {
     let mut n = 0;
+    let path_buf = path.to_path_buf();
     while n < amount {
-        let mut path = path.to_path_buf().clone();
+        let mut path = path_buf.clone();
         let filename = rand::thread_rng()
             .sample_iter(&rand::distributions::Alphanumeric)
             .take(10)
@@ -48,7 +49,7 @@ fn main() -> anyhow::Result<()> {
             .map(char::from)
             .collect::<String>();
         path.push(dir_name);
-        std::fs::create_dir_all(path.clone())?;
+        std::fs::create_dir_all(&path)?;
         generate_random_files(cli.num_files, &path)?;
         depth += 1;
     }
